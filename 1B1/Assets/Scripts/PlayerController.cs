@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
     private bool isInvincible = false;
 
     private float originalSpeed;
-    private float originalJumpForce; // 원래 점프력을 기억할 변수
+    private float originalJumpForce;
 
     private void Awake()
     {
@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
 
         originalSpeed = moveSpeed;
-        originalJumpForce = jumpForce; // 시작 시 점프력 저장
+        originalJumpForce = jumpForce;
     }
 
     void Update()
@@ -58,9 +58,14 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        // 데드 타일(함정) 충돌 로직 수정
         if (collision.CompareTag("Respawn"))
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            // 무적 상태가 아닐 때만 씬 재시작
+            if (!isInvincible)
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            }
         }
 
         if (collision.CompareTag("Finish"))
@@ -70,6 +75,7 @@ public class PlayerController : MonoBehaviour
 
         if (collision.CompareTag("Enemy"))
         {
+            // 적 충돌: 무적 상태가 아닐 때만 죽음
             if (!isInvincible)
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
@@ -82,7 +88,6 @@ public class PlayerController : MonoBehaviour
             Destroy(collision.gameObject);
         }
 
-        // 'jump' 태그 아이템 처리
         if (collision.CompareTag("jump"))
         {
             StartCoroutine(JumpUpRoutine());
@@ -96,12 +101,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // 점프력 강화 코루틴 (5초 유지)
     IEnumerator JumpUpRoutine()
     {
-        jumpForce = originalJumpForce + 3f; // 점프력 3 증가
-        yield return new WaitForSeconds(5f); // 5초 대기
-        jumpForce = originalJumpForce; // 원상복구
+        jumpForce = originalJumpForce + 3f;
+        yield return new WaitForSeconds(5f);
+        jumpForce = originalJumpForce;
     }
 
     IEnumerator SpeedUpRoutine()
@@ -119,6 +123,7 @@ public class PlayerController : MonoBehaviour
         float timer = 5f;
         while (timer > 0)
         {
+            // 깜빡이는 시각 효과
             spriteRenderer.color = new Color(1, 1, 1, 0.5f);
             yield return new WaitForSeconds(0.1f);
             spriteRenderer.color = new Color(1, 1, 1, 1f);
