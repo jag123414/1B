@@ -3,7 +3,13 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - Boundary
+  - Enemy
+  - Obstacle
+  - qjtjt
+  - Spped
+  - jump
   layers:
   - Default
   - TransparentFX
