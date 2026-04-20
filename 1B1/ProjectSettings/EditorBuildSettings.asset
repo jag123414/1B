@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Resources/Scenes/Maie.unity
+    guid: a90db21dae1c3594f9d516f7d1fa9f7b
+  - enabled: 1
     path: Assets/Resources/Scenes/Level_1.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
   - enabled: 1
